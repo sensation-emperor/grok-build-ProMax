@@ -1,0 +1,241 @@
+{
+  "name": "grok-build",
+  "displayName": "Grok Build",
+  "description": "AI-powered agentic coding assistant - Chat with Grok, spawn agents, and automate your workflow",
+  "version": "0.1.0",
+  "publisher": "xai",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "agent",
+    "grok",
+    "coding",
+    "llm",
+    "autocomplete",
+    "chat"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:grok.startSession",
+    "onCommand:grok.sendPrompt"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "grok.startSession",
+        "title": "Grok: Start New Session",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.resumeSession",
+        "title": "Grok: Resume Session",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.sendPrompt",
+        "title": "Grok: Send Prompt",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.addContext",
+        "title": "Grok: Add File to Context",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.explainCode",
+        "title": "Grok: Explain Selected Code",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.fixErrors",
+        "title": "Grok: Fix Errors in Selected Code",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.generateTests",
+        "title": "Grok: Generate Tests for Selected Code",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.refactor",
+        "title": "Grok: Refactor Selected Code",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.showDashboard",
+        "title": "Grok: Show Agent Dashboard",
+        "category": "Grok"
+      },
+      {
+        "command": "grok.settings",
+        "title": "Grok: Open Settings",
+        "category": "Grok"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "grok-sidebar",
+          "title": "Grok Build",
+          "icon": "resources/grok-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "grok-sidebar": [
+        {
+          "type": "webview",
+          "id": "grok.chatView",
+          "name": "Chat",
+          "icon": "resources/chat-icon.svg",
+          "contextualTitle": "Grok Chat"
+        },
+        {
+          "id": "grok.sessionsView",
+          "name": "Sessions",
+          "icon": "resources/sessions-icon.svg"
+        },
+        {
+          "id": "grok.agentsView",
+          "name": "Active Agents",
+          "icon": "resources/agents-icon.svg"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Grok Build",
+      "properties": {
+        "grok.binaryPath": {
+          "type": "string",
+          "default": "grok",
+          "description": "Path to the grok binary"
+        },
+        "grok.model": {
+          "type": "string",
+          "default": "default",
+          "description": "Default model to use"
+        },
+        "grok.permissionMode": {
+          "type": "string",
+          "default": "default",
+          "enum": ["default", "acceptEdits", "plan", "auto", "dontAsk"],
+          "description": "Default permission mode"
+        },
+        "grok.effort": {
+          "type": "string",
+          "default": "medium",
+          "enum": ["low", "medium", "high", "max"],
+          "description": "Default effort level"
+        },
+        "grok.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for cloud sessions (stored securely)"
+        },
+        "grok.enableInlineChat": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable inline chat widget"
+        },
+        "grok.enableAutocomplete": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable ghost text autocomplete"
+        },
+        "grok.maxContextFiles": {
+          "type": "number",
+          "default": 20,
+          "description": "Maximum number of files in context"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "grok.startSession",
+        "key": "ctrl+shift+g",
+        "mac": "cmd+shift+g",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "grok.sendPrompt",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "grokChatInputFocused"
+      },
+      {
+        "command": "grok.explainCode",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "grok.addContext",
+        "key": "ctrl+shift+@",
+        "mac": "cmd+shift+@",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "grok.submenu",
+          "group": "grok"
+        }
+      ],
+      "grok.submenu": [
+        {
+          "command": "grok.explainCode",
+          "group": "1_analyze",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "grok.fixErrors",
+          "group": "1_analyze",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "grok.generateTests",
+          "group": "2_generate",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "grok.refactor",
+          "group": "2_generate",
+          "when": "editorHasSelection"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "grok.submenu",
+        "label": "Grok"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@xai/grok-sdk": "^0.1.0",
+    "vscode-webview-ui-toolkit": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2",
+    "eslint": "^8.55.0",
+    "jest": "^29.7.0"
+  }
+}
